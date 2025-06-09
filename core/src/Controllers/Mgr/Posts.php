@@ -5,14 +5,11 @@ declare(strict_types=1);
 namespace MXRVX\Telegram\Bot\Sender\Controllers\Mgr;
 
 use MXRVX\Telegram\Bot\Sender\Controllers\ModelController;
-use MXRVX\Telegram\Bot\Sender\Controllers\Traits;
 use MXRVX\Telegram\Bot\Sender\Models\Post;
 use MXRVX\Telegram\Bot\Sender\Models\PostUser;
 
 class Posts extends ModelController
 {
-    use Traits\ModelQueryTrait;
-
     /** @var class-string */
     protected string $model = Post::class;
 
@@ -23,7 +20,7 @@ class Posts extends ModelController
 
     protected string $defaultSortField = 'id';
     protected string $defaultSortDirection = 'desc';
-    protected int $maxLimit = 1000;
+    protected int $maxLimit = 100;
 
     /** @var array<string> */
     protected array $searchFields = ['title'];
@@ -91,6 +88,8 @@ class Posts extends ModelController
 
     protected function beforeCount(\xPDOQuery $c): \xPDOQuery
     {
+        $c = parent::beforeCount($c);
+
         $c->leftJoin(PostUser::class, 'PostUsers');
 
         $fields = [
