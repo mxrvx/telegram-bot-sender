@@ -1,0 +1,43 @@
+.mxrvx-telegram-bot-sender-menu {
+
+    .x-menu-list li a.x-menu-item {
+        color: #555555;
+        font-size: 13px;
+        padding: 3px 5px 3px 5px;
+    }
+
+    .x-menu-item {
+
+        &:hover {
+            background-color: #e9ecef;
+            border-color: #adb5bd;
+            color: #000;
+        }
+
+        &:focus {
+            outline: none;
+        }
+
+        &:disabled,
+        &.disabled {
+            opacity: 0.65;
+            cursor: not-allowed;
+        }
+
+        > img {
+            display: none;
+        }
+
+        .x-menu-item-text {
+            margin-right: 10px;
+
+            > i {
+                margin: 0px 10px 0px 5px;
+                > span {
+                    margin: 0 5px 0 5px
+                }
+            }
+        }
+    }
+
+}

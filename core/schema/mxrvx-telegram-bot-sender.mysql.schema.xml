@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<model package="mxrvx-telegram-bot-sender" baseClass="xPDOObject" platform="mysql" defaultEngine="InnoDB"
+       phpdoc-package="mxrvx-telegram-bot-sender" version="1.1">
+
+    <object class="mxrvxTelegramBotSenderPost" table="mxrvx_telegram_bot_sender_posts" extends="xPDOSimpleObject">
+        <field key="title" dbtype="varchar" precision="191" phptype="string" null="false" default=""/>
+        <field key="is_active" dbtype="tinyint" precision="1" phptype="boolean" attributes="unsigned" null="false" default="1"/>
+        <field key="is_send" dbtype="tinyint" precision="1" phptype="boolean" attributes="unsigned" null="false" default="0"/>
+        <field key="created_at" dbtype="int" precision="20" phptype="timestamp" null="true" default="0"/>
+        <field key="updated_at" dbtype="int" precision="20" phptype="timestamp" null="true" default="0"/>
+        <field key="sended_at" dbtype="int" precision="20" phptype="timestamp" null="true" default="0"/>
+
+        <field key="content" dbtype="text" phptype="json" null="true"/>
+
+        <index alias="title" name="title" primary="false" unique="false" type="BTREE">
+            <column key="title" length="" collation="A" null="false"/>
+        </index>
+        <index alias="is_active" name="is_active" primary="false" unique="false" type="BTREE">
+            <column key="is_active" length="" collation="A" null="false"/>
+        </index>
+        <index alias="is_send" name="is_send" primary="false" unique="false" type="BTREE">
+            <column key="is_send" length="" collation="A" null="false"/>
+        </index>
+        <index alias="created_at" name="created_at" primary="false" unique="false" type="BTREE">
+            <column key="created_at" length="" collation="A" null="false"/>
+        </index>
+        <index alias="updated_at" name="updated_at" primary="false" unique="false" type="BTREE">
+            <column key="updated_at" length="" collation="A" null="false"/>
+        </index>
+        <index alias="sended_at" name="sended_at" primary="false" unique="false" type="BTREE">
+            <column key="sended_at" length="" collation="A" null="false"/>
+        </index>
+
+        <composite alias="PostUsers" class="mxrvxTelegramBotSenderPostUser" local="id" foreign="post_id" cardinality="many" owner="local"/>
+
+    </object>
+
+    <object class="mxrvxTelegramBotSenderPostUser" table="mxrvx_telegram_bot_sender_post_users" extends="xPDOObject">
+        <field key="post_id" dbtype="int" precision="20" phptype="integer" null="false" attributes="unsigned" index="pk"/>
+        <field key="user_id" dbtype="bigint" precision="20" phptype="integer" null="false" attributes="unsigned" index="pk"/>
+        <field key="is_send" dbtype="tinyint" precision="1" phptype="boolean" attributes="unsigned" null="false" default="0"/>
+        <field key="is_success" dbtype="tinyint" precision="1" phptype="boolean" attributes="unsigned" null="false" default="0"/>
+        <field key="created_at" dbtype="int" precision="20" phptype="timestamp" null="true" default="0"/>
+        <field key="sended_at" dbtype="int" precision="20" phptype="timestamp" null="true" default="0"/>
+
+        <index alias="PRIMARY" name="PRIMARY" primary="true" unique="true" type="BTREE">
+            <column key="post_id" length="" collation="A" null="false"/>
+            <column key="user_id" length="" collation="A" null="false"/>
+        </index>
+        <index alias="is_send" name="is_send" primary="false" unique="false" type="BTREE">
+            <column key="is_send" length="" collation="A" null="false"/>
+        </index>
+        <index alias="is_success" name="is_success" primary="false" unique="false" type="BTREE">
+            <column key="is_success" length="" collation="A" null="false"/>
+        </index>
+        <index alias="created_at" name="created_at" primary="false" unique="false" type="BTREE">
+            <column key="created_at" length="" collation="A" null="false"/>
+        </index>
+        <index alias="sended_at" name="sended_at" primary="false" unique="false" type="BTREE">
+            <column key="sended_at" length="" collation="A" null="false"/>
+        </index>
+
+        <aggregate alias="Post" class="mxrvxTelegramBotSenderPost" local="post_id" foreign="id" cardinality="one" owner="foreign" />
+        <aggregate alias="User" class="mxrvxTelegramBotUser" local="user_id" foreign="id" cardinality="one" owner="foreign" />
+
+    </object>
+
+
+</model>

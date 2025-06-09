@@ -1,0 +1,42 @@
+.mxrvx-telegram-bot-sender-grid {
+    padding: 5px 10px 10px 10px;
+
+    ul.mxrvx-telegram-bot-sender-actions.actions {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 2px;
+        margin: 0;
+        padding: 0;
+        list-style: none;
+    }
+
+    .x-grid3-row.row-inactive {
+        color: #aaa;
+    }
+
+
+
+    .x-grid3-col {
+        .badge {
+            padding: 0.25em 0.5em;
+            font-weight: 600;
+            color: #fff;
+            text-align: center;
+            white-space: nowrap;
+            vertical-align: baseline;
+            border-radius: 0.25rem;
+            margin-right: 0.3em;
+            background-color: #555555;
+        }
+
+        .badge-primary {
+            background-color: #007bff; /* синий */
+        }
+
+        .badge-success {
+            background-color: #28a745; /* зелёный */
+        }
+    }
+
+}

@@ -1,0 +1,92 @@
+%editor-content {
+    display: flex;
+    flex-flow: column nowrap;
+    gap: 0.5rem;
+
+    ul, ol {
+        margin: 0;
+        padding: 0 0 0 1rem;
+    }
+
+    pre {
+        margin: 0;
+    }
+
+    blockquote {
+        background: var(--bs-tertiary-bg);
+        border-left: 3px solid var(--bs-secondary);
+        padding: 0.25rem 0.5rem;
+        margin: 0;
+    }
+
+    .paragraph + .paragraph {
+        margin-top: 1rem;
+    }
+}
+
+.content-editor {
+    width: 100%;
+    padding-top: 20px;
+    overflow-y: scroll;
+    overflow-x: hidden;
+
+
+    .ce-popover__search, .ce-popover-item-separator {
+        display: none;
+    }
+
+    .video-tool__tune {
+        display: none;
+    }
+
+    .video-tool.video-tool--loading .video-tool__caption {
+        display: block;
+    }
+
+    .image-tool.image-tool--filled .image-tool__caption {
+        display: block;
+        visibility: visible;
+        position: static;
+    }
+    .ce-popover__items {
+        [data-item-name="withBorder"], [data-item-name="stretched"], [data-item-name="withBackground"] {
+            display: none;
+        }
+    }
+    emoji-picker {
+        user-select: none;
+        --emoji-size: 1.2rem;
+    }
+}
+
+
+.editorjs {
+    height: 100%;
+    min-height: 300px;
+
+    .codex-editor__redactor {
+        @extend %editor-content;
+        padding-bottom: 100px !important;
+    }
+
+    .cdx-block {
+        padding: 0;
+    }
+
+    .ce-header {
+        padding: 0;
+    }
+
+    .cdx-list__item {
+        padding: 0;
+    }
+
+    .ce-toolbar__actions {
+        right: 15px;
+    }
+}
+
+.ct.ct--shown {
+    z-index: 9999;
+}
+

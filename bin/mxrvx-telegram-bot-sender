@@ -1,0 +1,12 @@
+#!/usr/bin/env php
+<?php
+
+declare(strict_types=1);
+
+/** @psalm-suppress MissingFile */
+require dirname(__DIR__) . '/core/bootstrap.php';
+
+/** @var \modX $modx */
+if (isset($modx)) {
+    (new MXRVX\Telegram\Bot\Sender\Console\Console(new MXRVX\Telegram\Bot\Sender\App($modx)))->run();
+}

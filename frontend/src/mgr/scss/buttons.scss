@@ -1,0 +1,44 @@
+ul.mxrvx-telegram-bot-sender-actions {
+
+    .btn {
+        border-color: #ccc;
+        width: 1.2rem;
+        height: 1.2rem;
+        padding: 0;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+
+        &:hover {
+            background-color: #e9ecef;
+            border-color: #adb5bd;
+            color: #000;
+        }
+
+        &:focus {
+            outline: none;
+        }
+
+        &:disabled,
+        &.disabled {
+            opacity: 0.65;
+            cursor: not-allowed;
+        }
+
+        &[action="sep"] {
+
+            pointer-events: none;
+            background-color: #333;
+            border: none;
+            width: 1px;
+            margin: 0 4px;
+            padding: 0;
+            height: 0.8rem;
+        }
+
+        .icon {
+            font-size: 0.7rem;
+        }
+    }
+
+}

@@ -1,0 +1,25 @@
+.mxrvx-telegram-bot-sender-version {
+
+    .x-panel-body.x-panel-body-noheader {
+        height: 5px!important;
+    }
+
+    .x-panel-body.x-panel-body-noheader span, .x-panel-body.x-panel-body-noheader p {
+        color: white;
+        margin: 0;
+        padding: 2px 5px;
+        border-radius: 5px;
+        vertical-align: middle;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+        display: inline-block;
+    }
+    .x-panel-body.x-panel-body-noheader > span:first-child {
+        background-color: #3697cd;
+    }
+    .x-panel-body.x-panel-body-noheader > span:last-child {
+        background-color: #28a745;
+    }
+    .x-panel-body.x-panel-body-noheader p {
+        background-color: darkred;
+    }
+}
