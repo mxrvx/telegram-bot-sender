@@ -1,0 +1,11 @@
+{
+  "src/mgr.ts": {
+    "file": "mgr-C37Nfzzq.js",
+    "name": "mgr",
+    "src": "src/mgr.ts",
+    "isEntry": true,
+    "css": [
+      "mgr-BMdeI36B.css"
+    ]
+  }
+}
