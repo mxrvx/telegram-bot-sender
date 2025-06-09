@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 use MXRVX\Telegram\Bot\Sender\App;
 use MXRVX\Telegram\Bot\Sender\PostUserManager;
 
