@@ -16,8 +16,8 @@ class Context implements MiddlewareInterface
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
         $contextKey = (string) ($request->getQueryParams()['context'] ?? 'mgr');
-        if (!empty($contextKey) && $contextKey !== $this->modx->context->get('key')) {
-            $this->modx->initialize($contextKey);
+        if ($contextKey !== (string) $this->modx->context->get('key')) {
+            $this->modx->switchContext($contextKey);
         }
 
         return $handler->handle($request);

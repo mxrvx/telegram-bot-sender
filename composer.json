@@ -24,13 +24,13 @@
         "ext-json": "*",
         "ext-pdo": "*",
         "ext-simplexml": "*",
-        "mxrvx/autoloader": "*",
         "php-di/slim-bridge": "^3.4.0",
         "slim/psr7": "^1.6.0",
         "slim/slim": "^4.14.0",
         "league/flysystem": "^2.5.0|^3.29.0",
         "peppeocchi/php-cron-scheduler": "^4.0",
-        "mxrvx/telegram-bot": "*"
+        "mxrvx/autoloader": "^v0.1.6",
+        "mxrvx/telegram-bot": "^v0.1.3"
     },
     "require-dev": {
         "phpunit/phpunit": "^9.5",

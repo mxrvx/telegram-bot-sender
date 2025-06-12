@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+/** @psalm-suppress MissingFile */
+require_once MODX_CORE_PATH . 'vendor/autoload.php';
 
 /** @var array<array-key, array<array-key,string>|string> $_tmp */
 $_tmp = [
@@ -69,7 +71,7 @@ $_tmp = [
 ];
 
 /** @var array<array-key, string> $_tmp */
-$_tmp = MXRVX\Telegram\Bot\Sender\Tools\Lexicon::flatten($_tmp, MXRVX\Telegram\Bot\Sender\App::NAMESPACE);
+$_tmp = \MXRVX\Telegram\Bot\Sender\Tools\Lexicon::flatten($_tmp, \MXRVX\Telegram\Bot\Sender\App::NAMESPACE);
 
 /** @var array<array-key, string> $_lang */
 if (isset($_lang)) {

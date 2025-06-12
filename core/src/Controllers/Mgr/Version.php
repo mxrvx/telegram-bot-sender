@@ -17,13 +17,10 @@ class Version extends Controller
             'available' => '',
         ];
 
-        /** @var \MXRVX\Autoloader\App $autoloader */
-        $autoloader = $this->modx->services[\MXRVX\Autoloader\App::AUTOLOADER] ?? null;
-        if ($autoloader instanceof \MXRVX\Autoloader\App) {
-            if ($package = $autoloader->manager()->getPackage(App::NAMESPACE)) {
-                $results['current'] = $package->version;
-                $results['available'] =  \implode(' / ', $package->getAvailableVersions());
-            }
+        $autoloader = \MXRVX\Autoloader\App::getInstance($this->modx);
+        if ($package = $autoloader->manager()->getPackage(App::NAMESPACE)) {
+            $results['current'] = $package->version;
+            $results['available'] = \implode(' / ', $package->getAvailableVersions());
         }
 
         return $this->success($results);

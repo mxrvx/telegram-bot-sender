@@ -10,7 +10,7 @@ if (!\defined('MODX_CORE_PATH')) {
 
         $file = \implode(DIRECTORY_SEPARATOR, [$dir, 'core', 'config', 'config.inc.php']);
         if (\file_exists($file)) {
-            require_once $file;
+            require $file;
             break;
         }
     }
@@ -23,7 +23,7 @@ if (!\defined('MODX_CORE_PATH')) {
 
 $file = MODX_CORE_PATH . 'vendor/autoload.php';
 if (\file_exists($file)) {
-    require_once $file;
+    require $file;
 }
 
 unset($file);
@@ -35,19 +35,15 @@ require_once __DIR__ . '/deprecated.php';
 if (!isset($modx)) {
     /** @psalm-suppress MissingFile */
     if (!\class_exists(\modX::class) && \file_exists(MODX_CORE_PATH . 'model/modx/modx.class.php')) {
-        require_once MODX_CORE_PATH . 'model/modx/modx.class.php';
+        require MODX_CORE_PATH . 'model/modx/modx.class.php';
     }
     $modx = \modX::getInstance();
     $modx->initialize();
 }
 
-if (isset($modx)) {
-    /** @var MXRVX\Telegram\Bot\Sender\App $app */
-    $app = $modx->services[MXRVX\Telegram\Bot\Sender\App::class] ??= new MXRVX\Telegram\Bot\Sender\App($modx);
-    /** @var MXRVX\Telegram\Bot\App $telegram */
-    $telegram = $modx->services[MXRVX\Telegram\Bot\App::class] ?? null;
-    if ($telegram instanceof MXRVX\Telegram\Bot\App) {
-        $app->setTelegram($telegram);
-    }
-    unset($app, $telegram);
+\MXRVX\Telegram\Bot\Sender\App::injectDependencies($modx);
+/** @var \DI\Container $container */
+$container = $container ?? \MXRVX\Autoloader\App::getInstance($modx)->getContainer();
+if (!$container->has(\MXRVX\Telegram\Bot\Sender\App::class)) {
+    $container->set(\MXRVX\Telegram\Bot\Sender\App::class, \DI\autowire());
 }

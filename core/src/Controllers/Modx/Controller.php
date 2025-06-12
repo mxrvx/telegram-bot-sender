@@ -15,20 +15,16 @@ abstract class Controller extends \modExtraManagerController
     public function __construct(\modX &$modx, $config = [])
     {
         parent::__construct($modx, $config);
-        $this->app = $modx->services[App::class] ??= new App($modx);
-
-        /** @var \MXRVX\Autoloader\App $autoloader */
-        $autoloader = $modx->services[\MXRVX\Autoloader\App::AUTOLOADER] ?? null;
-        if ($autoloader instanceof \MXRVX\Autoloader\App) {
-            if ($package = $autoloader->manager()->getPackage(App::NAMESPACE)) {
-                $this->version = $package->version;
-            }
+        $autoloader = \MXRVX\Autoloader\App::getInstance($modx);
+        if ($package = $autoloader->manager()->getPackage(App::NAMESPACE)) {
+            $this->version = $package->version;
         }
+        $this->app = $autoloader->getContainer()->get(App::class);
     }
 
     public function getVersionHash(): string
     {
-        return '?v=' . \dechex(\crc32($this->version ?? \time()));
+        return '?v=' . \dechex(\crc32((string) ($this->version ?? \time())));
     }
 
     public function getLanguageTopics()

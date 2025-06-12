@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace MXRVX\Telegram\Bot\Sender\Console;
 
+use DI\Container;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Command\ListCommand;
 use MXRVX\Telegram\Bot\Sender\App;
@@ -12,7 +13,7 @@ use MXRVX\Telegram\Bot\Sender\Console\Command\RemoveCommand;
 
 class Console extends Application
 {
-    public function __construct(protected App $app)
+    public function __construct(protected Container $container)
     {
         parent::__construct(App::NAMESPACE);
     }
@@ -21,8 +22,8 @@ class Console extends Application
     {
         return [
             new ListCommand(),
-            new InstallCommand($this->app),
-            new RemoveCommand($this->app),
+            new InstallCommand($this->container),
+            new RemoveCommand($this->container),
         ];
     }
 }
