@@ -81,7 +81,7 @@ class InstallCommand extends Command
         }
 
         $schemaFile = $corePath . '/schema/' . App::NAMESPACE . '.mysql.schema.xml';
-        if (\file_get_contents($schemaFile)) {
+        if (\file_exists($schemaFile)) {
             $modx->addPackage(
                 App::NAMESPACE,
                 MODX_CORE_PATH . 'components/' . App::NAMESPACE . '/src/Models/' . App::NAMESPACE . '/',
