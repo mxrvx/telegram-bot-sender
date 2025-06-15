@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 /** @var \modX $modx */
 /** @psalm-suppress MissingFile */
-require \dirname(__DIR__) . '/bootstrap.php';
+require \dirname(__DIR__) . '/autoloader.php';
 
 /** @var \DI\Container $container */
 $container = $container ?? \MXRVX\Autoloader\App::getInstance($modx)->getContainer();

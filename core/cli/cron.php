@@ -7,7 +7,7 @@ use GO\Scheduler;
 
 /** @var \modX $modx */
 /** @psalm-suppress MissingFile */
-require \dirname(__DIR__) . '/bootstrap.php';
+require \dirname(__DIR__) . '/autoloader.php';
 $scheduler = new Scheduler();
 
 $scheduler->php(__DIR__ . '/send-posts.php', null, [], 'send_posts')

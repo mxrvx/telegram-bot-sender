@@ -52,7 +52,7 @@ abstract class Controller
 
         foreach ($scopes as $scope) {
             if (\str_contains($scope, '/')) {
-                if (!$this->modx->hasPermission($scope) && !$this->modx->hasPermission(\preg_replace('#/.*#', '', $scope))) {
+                if (!$this->modx->hasPermission($scope) && !$this->modx->hasPermission((string) \preg_replace('#/.*#', '', $scope))) {
                     return false;
                 }
             } elseif (!$this->modx->hasPermission($scope)) {

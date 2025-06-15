@@ -106,7 +106,7 @@ class Sender
         if (Blocks::validateImageBlock($block)) {
             $url = $block['data']['file']['url'];
             $path = \parse_url($url, PHP_URL_PATH);
-            $path = MODX_BASE_PATH . \ltrim($path, '/');
+            $path = MODX_BASE_PATH . \ltrim((string) $path, '/');
             if (!\file_exists($path)) {
                 return false;
             }
@@ -135,7 +135,7 @@ class Sender
         if (Blocks::validateVideoBlock($block)) {
             $url = $block['data']['file']['url'];
             $path = \parse_url($url, PHP_URL_PATH);
-            $path = MODX_BASE_PATH . \ltrim($path, '/');
+            $path = MODX_BASE_PATH . \ltrim((string) $path, '/');
             if (!\file_exists($path)) {
                 return false;
             }

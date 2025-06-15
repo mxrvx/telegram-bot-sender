@@ -11,7 +11,6 @@ class PostUserManager
 {
     public static function load(App $app, ?\Closure $callback = null, int $limit = 100): void
     {
-
         if ($callback === null) {
             $callback = [self::class, 'sendPost'];
         }

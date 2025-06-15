@@ -38,7 +38,7 @@ export function getLexicon() {
             return res
         }, {})
 
-    return expand(getLexiconRecords())
+    return expand(getRecords())
 }
 
 function pluralRule(choice: number, choicesLength: number) {

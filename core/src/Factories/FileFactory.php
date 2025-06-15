@@ -136,22 +136,24 @@ class FileFactory
 
     protected function normalizeFile(string|UploadedFile $file, ?array $metadata = []): UploadedFile
     {
-        if (\is_string($file)) {
-            if (!\strpos($file, ';base64,')) {
-                throw new \InvalidArgumentException('Could not parse base64 string');
-            }
-            $stream = \fopen('php://temp', 'rb+');
-            [$mime, $data] = \explode(',', $file);
-            \fwrite($stream, \base64_decode($data));
-            \fseek($stream, 0);
-            $stream = new Stream($stream);
+        if (\is_string($file) && \strpos($file, ';base64,') !== false) {
+            if ($stream = \fopen('php://temp', 'rb+')) {
+                [$mime, $data] = \explode(',', $file);
+                \fwrite($stream, \base64_decode($data));
+                \fseek($stream, 0);
+                $stream = new Stream($stream);
 
-            $file = new UploadedFile(
-                $stream,
-                !empty($metadata['name']) ? (string) $metadata['name'] : '',
-                \str_replace(['data:', ';base64'], '', $mime),
-                $stream->getSize(),
-            );
+                $file = new UploadedFile(
+                    $stream,
+                    !empty($metadata['name']) ? (string) $metadata['name'] : '',
+                    \str_replace(['data:', ';base64'], '', $mime),
+                    $stream->getSize(),
+                );
+            }
+        }
+
+        if (!($file instanceof UploadedFileInterface)) {
+            throw new \InvalidArgumentException('Could not parse UploadedFile');
         }
 
         return $file;

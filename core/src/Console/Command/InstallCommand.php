@@ -18,7 +18,7 @@ class InstallCommand extends Command
         $app = $this->app;
         $modx = $this->app->modx;
 
-        $srcPath = MODX_CORE_PATH . 'vendor/' . \preg_replace('/-/', '/', App::NAMESPACE, 1);
+        $srcPath = MODX_CORE_PATH . 'vendor/' . (string) \preg_replace('/-/', '/', App::NAMESPACE, 1);
         $corePath = MODX_CORE_PATH . 'components/' . App::NAMESPACE;
         if (!\is_dir($corePath)) {
             \symlink($srcPath . '/core', $corePath);
