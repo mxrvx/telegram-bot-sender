@@ -4,8 +4,12 @@ declare(strict_types=1);
 
 namespace MXRVX\Telegram\Bot\Sender\Controllers\Traits;
 
+use MXRVX\Telegram\Bot\Sender\Models\ModelInterface;
 use Psr\Http\Message\ResponseInterface;
 
+/**
+ * @psalm-import-type MetaData from ModelInterface
+ */
 trait ModelTrait
 {
     /**
@@ -79,11 +83,9 @@ trait ModelTrait
      */
     public function put(): ResponseInterface
     {
-        $record = $this->modx->newObject($this->model);
-        if ($record instanceof \xPDOObject) {
-            $data = \array_replace($record->toArray('', true), $this->getProperties(), \array_fill_keys($this->getPrimaryKey(), null));
-            $record->fromArray($data, '', true, true);
-
+        /** @var ModelInterface $record */
+        $record = $this->model::createInstance($this->getProperties());
+        if ($record instanceof ModelInterface) {
             if ($check = $this->beforeSave($record)) {
                 return $check;
             }
@@ -93,7 +95,7 @@ trait ModelTrait
             }
 
             $record = $this->afterSave($record);
-            $data = $record->toArray('', true);
+            $data = $record->toMetaData();
             return $this->success($this->prepareRow($data));
         }
         return $this->failure();
@@ -108,11 +110,10 @@ trait ModelTrait
             return $this->failure('You must specify the primary key of object');
         }
 
-        /** @var \xPDOObject $record */
-        $record = $this->modx->getObject($this->model, $pk);
-        if ($record instanceof \xPDOObject) {
-            $data = \array_replace($record->toArray('', true), $this->getProperties());
-            $record->fromArray($data, '', false, false);
+        /** @var ModelInterface $record */
+        $record = $this->model::getInstance($pk);
+        if ($record instanceof ModelInterface) {
+            $record->fill($this->getProperties());
 
             if ($check = $this->beforeSave($record)) {
                 return $check;
@@ -123,7 +124,7 @@ trait ModelTrait
             }
 
             $record = $this->afterSave($record);
-            $data = $record->toArray('', true);
+            $data = $record->toMetaData();
 
             return $this->success($this->prepareRow($data));
         }
@@ -140,9 +141,9 @@ trait ModelTrait
             return $this->failure('You must specify the primary key of object');
         }
 
-        /** @var \xPDOObject $record */
-        $record = $this->modx->getObject($this->model, $pk);
-        if ($record instanceof \xPDOObject) {
+        /** @var ModelInterface $record */
+        $record = $this->model::getInstance($pk);
+        if ($record instanceof ModelInterface) {
             if ($check = $this->beforeDelete($record)) {
                 return $check;
             }
@@ -152,7 +153,7 @@ trait ModelTrait
             }
 
             $record = $this->afterDelete($record);
-            $data = $record->toArray('', true);
+            $data = $record->toMetaData();
 
             return $this->success($this->prepareRow($data));
         }
@@ -169,7 +170,7 @@ trait ModelTrait
      * @psalm-suppress MixedArgument
      * @psalm-suppress MixedAssignment
      * @psalm-suppress RedundantCondition
-     *
+     * @param array<array-key, mixed>|MetaData $array
      * @return array<array-key, mixed>
      */
     public function prepareRow(array $array): array
@@ -431,22 +432,22 @@ trait ModelTrait
         return $c;
     }
 
-    protected function beforeSave(\xPDOObject $record): ?ResponseInterface
+    protected function beforeSave(ModelInterface $record): ?ResponseInterface
     {
         return null;
     }
 
-    protected function afterSave(\xPDOObject $record): \xPDOObject
+    protected function afterSave(ModelInterface $record): ModelInterface
     {
         return $record;
     }
 
-    protected function beforeDelete(\xPDOObject $record): ?ResponseInterface
+    protected function beforeDelete(ModelInterface $record): ?ResponseInterface
     {
         return null;
     }
 
-    protected function afterDelete(\xPDOObject $record): \xPDOObject
+    protected function afterDelete(ModelInterface $record): ModelInterface
     {
         return $record;
     }

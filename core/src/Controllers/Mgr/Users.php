@@ -9,9 +9,7 @@ use MXRVX\Telegram\Bot\Models\User;
 
 class Users extends ModelController
 {
-    /** @var class-string */
     protected string $model = User::class;
-
     protected string $alias = 'user';
 
     /** @var string|array<string> */

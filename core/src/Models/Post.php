@@ -209,10 +209,11 @@ class Post extends ModelWithId
 
     public function makeSend(): bool
     {
-        $postId = (int) parent::get('id');
-        $tablePostUser = $this->xpdo->getTableName(PostUser::class);
-        $tableUser = $this->xpdo->getTableName(User::class);
-        $columns = $this->xpdo->getSelectColumns(PostUser::class);
+        $modx = self::modx();
+        $postId = $this->getId();
+        $tablePostUser = $modx->getTableName(PostUser::class);
+        $tableUser = $modx->getTableName(User::class);
+        $columns = $modx->getSelectColumns(PostUser::class);
         $statuses = "'" . \implode("','", [User::STATUS_UNKNOWN, User::STATUS_KICKED, User::STATUS_LEFT]) . "'";
 
         $sql = \sprintf(
@@ -234,14 +235,14 @@ class Post extends ModelWithId
             $postId,
         );
 
-        $stmt = $this->xpdo->prepare($sql);
+        $stmt = $modx->prepare($sql);
         if ($stmt instanceof \PDOStatement) {
             if ($stmt->execute()) {
                 return true;
             }
-            $this->xpdo->log(\xPDO::LOG_LEVEL_ERROR, \sprintf('Error: %s SQL: %s', \var_export($stmt->errorInfo(), true), $sql));
+            $modx->log(\xPDO::LOG_LEVEL_ERROR, \sprintf('Error: %s SQL: %s', \var_export($stmt->errorInfo(), true), $sql));
         } else {
-            $this->xpdo->log(\xPDO::LOG_LEVEL_ERROR, \sprintf('Error: %s SQL: %s', $this->xpdo->errorInfo(), $sql));
+            $modx->log(\xPDO::LOG_LEVEL_ERROR, \sprintf('Error: %s SQL: %s', $modx->errorInfo(), $sql));
         }
 
         return false;

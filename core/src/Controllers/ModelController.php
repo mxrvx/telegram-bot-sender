@@ -4,12 +4,14 @@ declare(strict_types=1);
 
 namespace MXRVX\Telegram\Bot\Sender\Controllers;
 
+use MXRVX\Telegram\Bot\Sender\Models\ModelInterface;
+
 abstract class ModelController extends Controller
 {
     use Traits\ModelTrait;
     use Traits\ModelOperationTrait;
 
-    /** @var class-string */
+    /** @var class-string<ModelInterface> */
     protected string $model;
 
     protected string $alias;

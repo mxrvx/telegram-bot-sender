@@ -10,20 +10,20 @@ use MXRVX\Telegram\Bot\Sender\Models\PostUser;
 
 class Posts extends ModelController
 {
-    /** @var class-string */
+    /** @var class-string<Post> */
     protected string $model = Post::class;
 
     protected string $alias = 'post';
 
     /** @var string|array<string> */
-    protected array|string $primaryKey = 'id';
+    protected array|string $primaryKey = Post::FIELD_ID;
 
-    protected string $defaultSortField = 'id';
+    protected string $defaultSortField = Post::FIELD_ID;
     protected string $defaultSortDirection = 'desc';
     protected int $maxLimit = 100;
 
     /** @var array<string> */
-    protected array $searchFields = ['title'];
+    protected array $searchFields = [Post::FIELD_TITLE];
 
     public function getActions(array $array): array
     {
@@ -120,12 +120,19 @@ class Posts extends ModelController
     {
         $pk = $this->getPrimaryKeyValue((array) \reset($ids));
 
-        /** @var \xPDOObject $record */
-        $record = $this->modx->getObject($this->model, $pk);
-        if ($record instanceof \xPDOObject) {
-            $data = \array_merge($record->toArray('', true), [
-                'title' => \sprintf('Копия: %s', (string) $record->get('title')),
-            ]);
+        /** @var Post $record */
+        $record = $this->model::getInstance($pk);
+        if ($record) {
+            $record
+                ->setTitle(\sprintf('Копия: %s', $record->getTitle()))
+                ->setIsActive(true)
+                ->setIsSend(false)
+                ->setCreatedAt(\time())
+                ->setUpdatedAt(null)
+                ->setSendedAt(null);
+
+            $data = $record->toMetaData();
+
             return $this->processOperation('put', $ids, $data);
         }
 

@@ -5,11 +5,12 @@ declare(strict_types=1);
 namespace MXRVX\Telegram\Bot\Sender\Models\Traits;
 
 use MXRVX\Autoloader\App as Autoloader;
+use MXRVX\Telegram\Bot\Sender\Models\Model;
+use MXRVX\Telegram\Bot\Sender\Models\ModelWithId;
 use MXRVX\Telegram\Bot\Tools\Caster;
 
 /**
- * @psalm-type MetaData = array{
- * }
+ * @psalm-import-type MetaData from Model
  */
 trait ModelTrait
 {
@@ -40,9 +41,11 @@ trait ModelTrait
     {
         $modx = self::modx();
         $instance = new static($modx);
-        $instance->fromArray($metadata, '', true);
-
         $isNew = static::getMetaDataValue(static::FIELD_IS_NEW, $metadata);
+        if ($isNew && \is_subclass_of(static::class, ModelWithId::class)) {
+            unset($metadata[static::FIELD_ID]);
+        }
+        $instance->fromArray($metadata, '', true);
         $instance->setNew($isNew);
         $instance->initChangedMetaDataFields($isNew);
 

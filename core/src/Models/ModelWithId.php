@@ -4,7 +4,10 @@ declare(strict_types=1);
 
 namespace MXRVX\Telegram\Bot\Sender\Models;
 
-abstract class ModelWithId extends \xPDOSimpleObject
+/**
+ * @psalm-import-type MetaData from ModelInterface
+ */
+abstract class ModelWithId extends \xPDOSimpleObject implements ModelInterface
 {
     use Traits\ModelTrait;
 
