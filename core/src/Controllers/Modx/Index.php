@@ -17,7 +17,7 @@ class Index extends Controller
 
         $config = [
             'locale' => $locale,
-            'lexicon' => Lexicon::get($this->modx, $locale),
+            'lexicon' => Lexicon::items($locale),
             'api_url' => App::API_URL,
             'grid_post_fields' => $this->getGridFieldsForPost(),
             'grid_user_fields' => $this->getGridFieldsForUser(),
