@@ -5,39 +5,75 @@ declare(strict_types=1);
 
 namespace MXRVX\Telegram\Bot\Sender\Tools;
 
+use MXRVX\Autoloader\App as Autoloader;
 use MXRVX\Telegram\Bot\Sender\App;
 
 class Lexicon
 {
+    protected static ?\modX $modx = null;
+    protected static ?\modLexicon $lexicon = null;
+
     /**
-     * @param array<array-key, array<array-key,string>|string> $arr
-     * @return array<array-key, string>
+     * @param array<array-key, array<array-key,mixed>|mixed> $arr
+     * @return array<string, string>
      */
-    public static function flatten(array $arr, string $prefix = '', string $delimiter = '.'): array
+    public static function make(array $arr, string $prefix = '', string $delimiter = '.'): array
     {
+        /** @var array<string, string> $out */
         $out = [];
+
+        /** @var mixed $v */
         foreach ($arr as $k => $v) {
-            $key = empty($prefix) ? $k : $prefix . $delimiter . $k;
+            $key = Caster::string(empty($prefix) ? $k : $prefix . $delimiter . $k);
             if (\is_array($v)) {
-                $out += self::flatten($v, (string) $key, $delimiter);
-            } elseif (\is_string($v)) {
-                $out[$key] = $v;
+                $out += self::make($v, $key, $delimiter);
+            } elseif (\is_scalar($v)) {
+                $out[$key] = Caster::string($v, 0);
             }
         }
 
         return $out;
     }
 
-    public static function get(\modX $modx, string $locale = 'en', array|string $prefix = []): array
+    /**
+     * @param array<array-key, array<array-key,string|int|float|bool>|string|int|float|bool> $placeholders
+     */
+    public static function item(string $key, array $placeholders = []): string
     {
-        $entries = [];
+        $item = $key;
 
-        /** @psalm-suppress DeprecatedMethod */
-        $lexicon = $modx->lexicon instanceof \modLexicon ? $modx->lexicon : $modx->getService('lexicon', 'modLexicon');
+        $lexicon = self::lexicon();
+        if ($lexicon) {
+            $lexicon->load(App::NAMESPACE . ':default');
 
-        if (isset($lexicon) && ($lexicon instanceof \modLexicon)) {
-            $namespace = App::NAMESPACE;
-            $lexicon->load($locale . ':' . $namespace . ':default');
+            if (\str_starts_with($key, ':')) {
+                $key = App::NAMESPACE . '.' . \mb_substr($key, 1);
+            }
+
+            if ($lexicon->exists($key)) {
+                $item = $lexicon->process($key, $placeholders);
+
+                if ($placeholders) {
+                    $placeholders = self::make($placeholders);
+                    foreach ($placeholders as $k => $v) {
+                        $item = \str_replace(\sprintf('{%s}', $k), $v, $item);
+                    }
+                }
+            } else {
+                $item = $key;
+            }
+        }
+
+        return $item;
+    }
+
+    public static function items(string $locale = 'en', array|string $prefix = []): array
+    {
+        $items = [];
+
+        $lexicon = self::lexicon();
+        if ($lexicon) {
+            $lexicon->load($locale . ':' . App::NAMESPACE . ':default');
 
 
             if (!empty($prefix)) {
@@ -50,21 +86,38 @@ class Lexicon
                 }
 
                 foreach ($prefixes as $prefix) {
-                    $entries += $modx->lexicon->fetch($namespace . '.' . $prefix);
+                    $items += $lexicon->fetch(App::NAMESPACE . '.' . $prefix);
                 }
 
             } else {
-                $entries = $modx->lexicon->fetch($namespace);
+                $items = $lexicon->fetch(App::NAMESPACE);
             }
 
+            $keys = \array_map(static function ($key) {
+                return (string) \str_replace(App::NAMESPACE . '.', '', (string) $key);
+            }, \array_keys($items));
 
-            $keys = \array_map(static function ($key) use ($namespace) {
-                return (string) \str_replace($namespace . '.', '', (string) $key);
-            }, \array_keys($entries));
-
-            $entries = \array_combine($keys, \array_values($entries));
+            $items = \array_combine($keys, \array_values($items));
         }
 
-        return $entries;
+        return $items;
+    }
+
+    protected static function lexicon(): ?\modLexicon
+    {
+        if (self::$lexicon === null) {
+            /** @psalm-suppress DeprecatedMethod */
+            $lexicon = self::modx()->getService('lexicon', 'modLexicon');
+            if ($lexicon instanceof \modLexicon) {
+                self::$lexicon = $lexicon;
+            }
+        }
+
+        return self::$lexicon;
+    }
+
+    protected static function modx(): \modX
+    {
+        return self::$modx ??= Autoloader::getModxInstance();
     }
 }

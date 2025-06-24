@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace MXRVX\Telegram\Bot\Sender\Contracts;
+namespace MXRVX\Telegram\Bot\Sender\Factories;
 
 use MXRVX\Telegram\Bot\Sender\Services\FileSystem;
 use Psr\Http\Message\UploadedFileInterface;

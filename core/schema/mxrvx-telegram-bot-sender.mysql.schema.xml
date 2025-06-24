@@ -9,7 +9,6 @@
         <field key="created_at" dbtype="int" precision="20" phptype="timestamp" null="true" default="0"/>
         <field key="updated_at" dbtype="int" precision="20" phptype="timestamp" null="true" default="0"/>
         <field key="sended_at" dbtype="int" precision="20" phptype="timestamp" null="true" default="0"/>
-
         <field key="content" dbtype="text" phptype="json" null="true"/>
 
         <index alias="title" name="title" primary="false" unique="false" type="BTREE">

@@ -57,7 +57,6 @@ class AssetsManager
      */
     protected static function getAssetsFromManifest(string $context): array
     {
-        $script = 'src/' . $context . '.ts';
         $baseUrl = MODX_ASSETS_URL . 'components/' . App::NAMESPACE . '/src/' . $context . '/';
         $manifest = MODX_ASSETS_PATH . 'components/' . App::NAMESPACE . '/src/' . $context . '/manifest.json';
 

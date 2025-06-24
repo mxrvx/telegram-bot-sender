@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace MXRVX\Telegram\Bot\Sender\Controllers\Mgr\Editor\Upload;
 
-use MXRVX\Telegram\Bot\Sender\Contracts\FileFactory as ContractFile;
+use MXRVX\Telegram\Bot\Sender\Factories\FileFactory;
 
 class Video extends File
 {
-    protected function validateFile(ContractFile $file): ?string
+    protected function validateFile(FileFactory $file): ?string
     {
         $validation = parent::validateFile($file);
         if ($validation !== null) {

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace MXRVX\Telegram\Bot\Sender\Controllers\Mgr\Editor\Upload;
 
-use MXRVX\Telegram\Bot\Sender\Contracts\FileFactory as ContractFile;
+use MXRVX\Telegram\Bot\Sender\Factories\FileFactory;
 use MXRVX\Telegram\Bot\Sender\Controllers\Controller;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -46,12 +46,12 @@ class File extends Controller
         return $this->failure('Could not load file');
     }
 
-    protected function createFile(UploadedFile $file): ContractFile
+    protected function createFile(UploadedFile $file): FileFactory
     {
-        return new ContractFile($file);
+        return new FileFactory($file);
     }
 
-    protected function validateFile(ContractFile $file): ?string
+    protected function validateFile(FileFactory $file): ?string
     {
         // Пример проверки размера (максимум 5 Мб)
         /*$maxSize = 5 * 1024 * 1024;
@@ -68,7 +68,7 @@ class File extends Controller
         return null;
     }
 
-    protected function saveFile(ContractFile $file): ?ContractFile
+    protected function saveFile(FileFactory $file): ?FileFactory
     {
         return $file->save();
     }

@@ -5,6 +5,9 @@ declare(strict_types=1);
 /** @psalm-suppress MissingFile */
 require_once MODX_CORE_PATH . 'vendor/autoload.php';
 
+use MXRVX\Telegram\Bot\Sender\App;
+use MXRVX\Telegram\Bot\Sender\Tools\Lexicon;
+
 /** @var array<array-key, array<array-key,string>|string> $_tmp */
 $_tmp = [
     'menu' => [
@@ -15,7 +18,7 @@ $_tmp = [
     ],
     'version' => [
         'current' => 'версия: {version}',
-        'available' => 'доступна: {version}',
+        'available' => 'доступная версия: {version}',
     ],
     'actions' => [
         'add' => 'Добавить',
@@ -51,6 +54,10 @@ $_tmp = [
             'created_at' => 'Дата создания',
             'updated_at' => 'Дата обновления',
             'sended_at' => 'Дата отправки',
+            'status' => 'Статус',
+            'total' => 'Всего',
+            'total_send' => 'Отправлено',
+            'total_success_send' => 'Успешно',
         ],
         'user' => [
             'title_one' => 'Юзер',
@@ -67,7 +74,7 @@ $_tmp = [
 ];
 
 /** @var array<array-key, string> $_tmp */
-$_tmp = \MXRVX\Telegram\Bot\Sender\Tools\Lexicon::flatten($_tmp, \MXRVX\Telegram\Bot\Sender\App::NAMESPACE);
+$_tmp = Lexicon::make($_tmp, App::NAMESPACE);
 
 /** @var array<array-key, string> $_lang */
 if (isset($_lang)) {

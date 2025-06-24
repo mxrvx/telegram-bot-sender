@@ -5,25 +5,200 @@ declare(strict_types=1);
 namespace MXRVX\Telegram\Bot\Sender\Models;
 
 use MXRVX\Telegram\Bot\Models\User;
+use MXRVX\Telegram\Bot\Tools\Caster;
 
-class Post extends \xPDOSimpleObject
+/**
+ * @psalm-type MetaData = array{
+ * id: int,
+ * title: string,
+ * is_active: bool,
+ * is_send: bool,
+ * created_at: int,
+ * updated_at: int,
+ * sended_at: int,
+ * content: array
+ * }
+ */
+class Post extends ModelWithId
 {
-    public function save($cacheFlag = null)
+    public const FIELD_ID = 'id';
+    public const FIELD_TITLE = 'title';
+    public const FIELD_IS_ACTIVE = 'is_active';
+    public const FIELD_IS_SEND = 'is_send';
+    public const FIELD_CREATED_AT = 'created_at';
+    public const FIELD_UPDATED_AT = 'updated_at';
+    public const FIELD_SENDED_AT = 'sended_at';
+    public const FIELD_CONTENT = 'content';
+    public const FIELDS_FOR_QUERY = [
+        self::FIELD_ID,
+    ];
+
+    /**
+     * @var array<string, callable>
+     */
+    protected static array $fieldMappers = [
+        self::FIELD_ID => [self::class, 'getMetaDataId'],
+        self::FIELD_TITLE => [self::class, 'getMetaDataTitle'],
+        self::FIELD_IS_ACTIVE => [self::class, 'getMetaDataIsActive'],
+        self::FIELD_IS_SEND => [self::class, 'getMetaDataIsSend'],
+        self::FIELD_CREATED_AT => [self::class, 'getMetaDataCreatedAt'],
+        self::FIELD_UPDATED_AT => [self::class, 'getMetaDataUpdatedAt'],
+        self::FIELD_SENDED_AT => [self::class, 'getMetaDataSendedAt'],
+        self::FIELD_CONTENT => [self::class, 'getMetaDataContent'],
+    ];
+
+    /**
+     * @param array<string, mixed> $data
+     */
+    public static function getMetaDataQueryValues(array $data, array $fields = []): ?array
     {
-        if (parent::isNew()) {
-            parent::set('created_at', \time());
-            parent::set('is_send', false);
-            parent::set('updated_at', null);
-            parent::set('sended_at', null);
-        } else {
-            parent::set('updated_at', \time());
+        /** @psalm-var MetaData|null $metadata */
+        if (!$metadata = parent::getMetaDataQueryValues($data, $fields)) {
+            return null;
         }
 
-        if (parent::isDirty('is_send') && (int) parent::get('is_send') === 1) {
+        $metadata = \array_filter($metadata, static function ($value) {
+            return !empty($value);
+        });
+
+        return $metadata ?? null;
+    }
+
+    public static function getMetaDataId(mixed $value): int
+    {
+        return Caster::int($value);
+    }
+
+    public static function getMetaDataTitle(mixed $value): string
+    {
+        return Caster::string($value);
+    }
+
+    public static function getMetaDataIsActive(mixed $value): bool
+    {
+        return Caster::bool($value);
+    }
+
+    public static function getMetaDataIsSend(mixed $value): bool
+    {
+        return Caster::bool($value);
+    }
+
+    public static function getMetaDataCreatedAt(mixed $value): int
+    {
+        return Caster::int($value);
+    }
+
+    public static function getMetaDataUpdatedAt(mixed $value): int
+    {
+        return Caster::int($value);
+    }
+
+    public static function getMetaDataSendedAt(mixed $value): int
+    {
+        return Caster::int($value);
+    }
+
+    public static function getMetaDataContent(mixed $value): array
+    {
+        return Caster::array($value);
+    }
+
+    public function getId(): int
+    {
+        return $this->getFieldValue(self::FIELD_ID);
+    }
+
+    public function getTitle(): string
+    {
+        return $this->getFieldValue(self::FIELD_TITLE);
+    }
+
+    public function getIsActive(): bool
+    {
+        return $this->getFieldValue(self::FIELD_IS_ACTIVE);
+    }
+
+    public function getIsSend(): bool
+    {
+        return $this->getFieldValue(self::FIELD_IS_SEND);
+    }
+
+    public function getCreatedAt(): int
+    {
+        return $this->getFieldValue(self::FIELD_CREATED_AT);
+    }
+
+    public function getUpdatedAt(): int
+    {
+        return $this->getFieldValue(self::FIELD_UPDATED_AT);
+    }
+
+    public function getSendedAt(): int
+    {
+        return $this->getFieldValue(self::FIELD_SENDED_AT);
+    }
+
+    public function getContent(): array
+    {
+        return $this->getFieldValue(self::FIELD_CONTENT);
+    }
+
+    public function setId(mixed $value): self
+    {
+        return $this->setFieldValue(self::FIELD_ID, $value);
+    }
+
+    public function setTitle(mixed $value): self
+    {
+        return $this->setFieldValue(self::FIELD_TITLE, $value);
+    }
+
+    public function setIsActive(mixed $value): self
+    {
+        return $this->setFieldValue(self::FIELD_IS_ACTIVE, $value);
+    }
+
+    public function setIsSend(mixed $value): self
+    {
+        return $this->setFieldValue(self::FIELD_IS_SEND, $value);
+    }
+
+    public function setCreatedAt(mixed $value): self
+    {
+        return $this->setFieldValue(self::FIELD_CREATED_AT, $value);
+    }
+
+    public function setUpdatedAt(mixed $value): self
+    {
+        return $this->setFieldValue(self::FIELD_UPDATED_AT, $value);
+    }
+
+    public function setSendedAt(mixed $value): self
+    {
+        return $this->setFieldValue(self::FIELD_SENDED_AT, $value);
+    }
+
+    public function setContent(mixed $value): self
+    {
+        return $this->setFieldValue(self::FIELD_CONTENT, $value);
+    }
+
+    public function save($cacheFlag = null)
+    {
+        if ($this->isNew()) {
+            $this->setCreatedAt(\time());
+            $this->setIsActive(true);
+            $this->setIsSend(false);
+        } else {
+            $this->setUpdatedAt(\time());
+        }
+
+        if ($this->hasChangedMetaData(self::FIELD_IS_SEND) && $this->getIsSend()) {
             if ($this->makeSend()) {
-                parent::set('sended_at', \time());
+                $this->setSendedAt(\time());
             } else {
-                parent::set('is_send', 0);
+                $this->setIsSend(false);
             }
         }
 
@@ -34,11 +209,6 @@ class Post extends \xPDOSimpleObject
 
     public function makeSend(): bool
     {
-        $blocks = parent::get('content')['blocks'] ?? [];
-        if (empty($blocks)) {
-            return false;
-        }
-
         $postId = (int) parent::get('id');
         $tablePostUser = $this->xpdo->getTableName(PostUser::class);
         $tableUser = $this->xpdo->getTableName(User::class);

@@ -18,7 +18,6 @@ if (isset($_SERVER['QUERY_STRING'])) {
 /** @var \DI\Container $container */
 /** @psalm-suppress MissingFile */
 require dirname(__DIR__, 2) . '/core/autoloader.php';
-$modx = \modX::getInstance(\modX::class);
 $modx->initialize();
 
 $container = \MXRVX\Autoloader\App::getInstance($modx)->getContainer();
