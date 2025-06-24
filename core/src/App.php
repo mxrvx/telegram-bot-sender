@@ -56,8 +56,9 @@ class App
 
         /** @var array<int, class-string> $namespaceClasses */
         $namespaceClasses = ClassLister::findByRegex('/^' . \preg_quote($modelNamespace, '/') . '(?!.*_mysql$).+$/');
-        $namespaceClasses = \array_filter($namespaceClasses, static function ($class) {
-            return !\str_starts_with($class, 'Model');
+        $namespaceClasses = \array_filter($namespaceClasses, static function (string $className) {
+            $name = \substr((string) \strrchr($className, '\\'), 1);
+            return !\str_starts_with($name, 'Model');
         });
         foreach ($namespaceClasses as $namespaceClass) {
             if (isset($modx->map[$namespaceClass])) {
