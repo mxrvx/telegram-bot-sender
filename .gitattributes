@@ -4,6 +4,7 @@
 tests                  export-ignore
 .*                     export-ignore
 *.xml                  export-ignore
+core/schema/mxrvx-telegram-bot-sender.mysql.schema.xml   -export-ignore
 *.xml.dist             export-ignore
 .php-cs-fixer.dist.php export-ignore
 composer.lock          export-ignore
